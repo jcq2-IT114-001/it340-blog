@@ -1,7 +1,7 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Retro Blog Login</title>
 
   <style>
@@ -15,43 +15,43 @@
 
     #container {
       margin: 120px auto;
-      width: 380px;
+      width: 420px;
       padding: 20px;
-      background: #ffffff;
+      background: white;
       border: 2px solid #2f4f6f;
       box-shadow: 4px 4px 0px #2f4f6f;
     }
 
     h2 {
       margin-bottom: 20px;
-      color: #2f4f6f;
     }
 
     input {
       width: 90%;
       padding: 10px;
-      margin: 10px 0;
+      margin: 8px 0;
       border: 1px solid #2f4f6f;
       font-size: 14px;
     }
 
     button {
-      margin-top: 15px;
+      margin-top: 12px;
       padding: 10px 25px;
       background: #2f4f6f;
-      color: #ffffff;
+      color: white;
       border: none;
-      font-size: 14px;
       cursor: pointer;
+      font-size: 14px;
     }
 
     button:hover {
       opacity: 0.85;
     }
 
-    #status {
+    footer {
       margin-top: 15px;
-      font-size: 14px;
+      font-size: 11px;
+      color: #555;
     }
   </style>
 </head>
@@ -67,16 +67,15 @@
     <br>
     <button onclick="login()">Login</button>
 
-    <div id="status"></div>
+    <footer>
+      <p>© 2003 vibes only</p>
+    </footer>
   </div>
 
   <script>
     function login() {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
-      const status = document.getElementById("status");
-
-      status.innerText = "Checking credentials...";
 
       fetch("http://192.168.64.129:3000/login", {
         method: "POST",
@@ -88,23 +87,20 @@
           password: password
         })
       })
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
         if (data.success) {
-          status.innerText = "✅ Login successful!";
-          status.style.color = "green";
+          alert("Login successful!");
         } else {
-          status.innerText = "❌ Invalid username or password.";
-          status.style.color = "red";
+          alert("Invalid credentials.");
         }
       })
-      .catch(error => {
-        status.innerText = "⚠️ Backend unreachable.";
-        status.style.color = "red";
+      .catch(err => {
+        alert("Backend not reachable.");
+        console.error(err);
       });
     }
   </script>
 
 </body>
 </html>
-
