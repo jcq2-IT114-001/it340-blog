@@ -1,9 +1,7 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Retro Blog Login</title>
-
   <style>
     body {
       background-color: #c0d9f7;
@@ -48,14 +46,13 @@
       opacity: 0.85;
     }
 
-    footer {
-      margin-top: 15px;
-      font-size: 11px;
-      color: #555;
+    #mfa-container {
+      display: none;
+      margin-top: 20px;
     }
+
   </style>
 </head>
-
 <body>
 
   <div id="container">
@@ -66,15 +63,25 @@
 
     <br>
     <button onclick="login()">Login</button>
+    
+    <!-- MFA Code Prompt -->
+    <div id="mfa-container">
+      <h3>Enter MFA Code</h3>
+      <input id="mfa-code" type="text" placeholder="MFA Code">
+      <button onclick="verifyMFA()">Verify Code</button>
+    </div>
+  </div>
 
-    <footer>
-      <p>© 2003 vibes only</p>
-    </footer>
+    <!-- Link to Blog Page -->
+    <a href="/blog.html">Go to Blog</a>  <!-- Add this link to go to the blog page -->
   </div>
 
   <script>
+    let username = '';
+
+    // Login function
     function login() {
-      const username = document.getElementById("username").value;
+      username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
       fetch("http://192.168.64.129:3000/login", {
@@ -82,23 +89,39 @@
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          username: username,
-          password: password
-        })
+        body: JSON.stringify({ username, password })
       })
       .then(res => res.json())
       .then(data => {
-        if (data.success) {
-          alert("Login successful!");
+        if (data.mfaRequired) {
+          document.getElementById("mfa-container").style.display = "block";
         } else {
-          alert("Invalid credentials.");
+          alert(data.success ? "Login successful!" : "Login failed!");
         }
       })
       .catch(err => {
         alert("Backend not reachable.");
         console.error(err);
       });
+    }
+
+    // MFA verification function
+    function verifyMFA() {
+      const code = document.getElementById("mfa-code").value;
+
+      fetch("http://192.168.64.129:3000/verify-mfa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, code })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.success ? "MFA Verified!" : "Invalid MFA code.");
+        if (data.success) {
+          window.location.href = "/blog.html"; // Redirect to the dashboard or main page
+        }
+      })
+      .catch(err => console.error("Error verifying MFA", err));
     }
   </script>
 
