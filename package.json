@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,13 @@
     "cors": "^2.8.5",
     "express": "^5.2.1",
     "mongoose": "^9.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcq2-IT114-001/it340-blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jcq2-IT114-001/it340-blog/issues"
+  },
+  "homepage": "https://github.com/jcq2-IT114-001/it340-blog#readme"
 }

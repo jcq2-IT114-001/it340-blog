@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect("mongodb://VM3_IP:27017/blogdb");
+mongoose.connect("mongodb://192.168.64.130/blogdb");
 
 const User = mongoose.model("User", {
   username: String,
