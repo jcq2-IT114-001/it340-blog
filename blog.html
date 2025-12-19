@@ -1,25 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blog Posts</title>
+  <title>Blog</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    .post { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; }
-    .post h2 { color: #2f4f6f; }
-    .post p { color: #555; }
+    body { font-family: Arial; margin: 40px; }
+    .post { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; }
   </style>
 </head>
 <body>
-  <h1>Welcome to the Blog</h1>
 
-  <div class="post">
-    <h2>Post Title 1</h2>
-    <p>This is a sample post content. More posts will be added soon!</p>
-  </div>
+<h1>Blog</h1>
+<a href="view-blog.html">View Existing Blog Posts</a>
+<hr>
 
-  <div class="post">
-    <h2>Post Title 2</h2>
-    <p>Here's another example of a blog post. This is static for now.</p>
-  </div>
+
+<form id="postForm">
+  <input id="title" placeholder="Title" required><br><br>
+  <textarea id="content" placeholder="Content" required></textarea><br><br>
+  <button type="submit">Post</button>
+</form>
+
+<hr>
+
+<div id="posts"></div>
+
+<script>
+const API = "http://192.168.64.129:3000/api/posts";
+
+async function loadPosts() {
+  const res = await fetch(API);
+  const posts = await res.json();
+
+  const div = document.getElementById("posts");
+  div.innerHTML = "";
+
+  posts.forEach(p => {
+    div.innerHTML += `
+      <div class="post">
+        <h3>${p.title}</h3>
+        <p>${p.content}</p>
+        <small>${new Date(p.createdAt).toLocaleString()}</small>
+      </div>
+    `;
+  });
+}
+
+document.getElementById("postForm").onsubmit = async e => {
+  e.preventDefault();
+
+  await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: title.value,
+      content: content.value
+    })
+  });
+
+  title.value = "";
+  content.value = "";
+  loadPosts();
+};
+
+loadPosts();
+</script>
+
 </body>
 </html>

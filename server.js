@@ -2,9 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const postsRoutes = require("./routes/posts");
 
 const app = express();
 app.use(cors());
+app.use("/api/posts", postsRoutes);
 app.use(bodyParser.json());
 
 mongoose.connect("mongodb://192.168.64.130:27017/blogdb")
