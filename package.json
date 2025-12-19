@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/jcq2-IT114-001/it340-blog/issues"
   },
-  "homepage": "https://github.com/jcq2-IT114-001/it340-blog#readme"
+  "homepage": "https://github.com/jcq2-IT114-001/it340-blog#readme",
+  "devDependencies": {}
 }

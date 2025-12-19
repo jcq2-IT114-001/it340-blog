@@ -1,32 +1,21 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
 
-app.use(cors());              // allow frontend VM requests
-app.use(express.json());      // parse JSON bodies
-app.options("*", cors());    // handle CORS preflight (OPTIONS)
+app.use(cors());
+app.use(bodyParser.json());
 
+mongoose.connect("mongodb://192.168.64.130:27017/blogdb")
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
-mongoose.connect("mongodb://192.168.64.130:27017/blog", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-mongoose.connection.once("open", () => {
-  console.log("MongoDB connected");
-});
-
-const UserSchema = new mongoose.Schema({
+const User = mongoose.model("User", {
   username: String,
   password: String
 });
-
-const User = mongoose.model("User", UserSchema);
-
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -40,10 +29,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-/* =====================
-   Server
-   ===================== */
-app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log("Backend running on port 3000");
 });
-
