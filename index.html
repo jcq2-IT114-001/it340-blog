@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Blog Login</title>
+  <meta charset="UTF-8">
+  <title>Retro Blog Login</title>
+
   <style>
     body {
       background-color: #c0d9f7;
@@ -12,12 +14,17 @@
     }
 
     #container {
-      margin: 100px auto;
-      width: 400px;
+      margin: 120px auto;
+      width: 380px;
       padding: 20px;
-      background: white;
+      background: #ffffff;
       border: 2px solid #2f4f6f;
-      box-shadow: 3px 3px 0px #2f4f6f;
+      box-shadow: 4px 4px 0px #2f4f6f;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #2f4f6f;
     }
 
     input {
@@ -25,28 +32,79 @@
       padding: 10px;
       margin: 10px 0;
       border: 1px solid #2f4f6f;
+      font-size: 14px;
     }
 
     button {
-      padding: 10px 20px;
+      margin-top: 15px;
+      padding: 10px 25px;
       background: #2f4f6f;
-      color: white;
+      color: #ffffff;
       border: none;
+      font-size: 14px;
       cursor: pointer;
     }
 
     button:hover {
-      opacity: 0.8;
+      opacity: 0.85;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 14px;
     }
   </style>
 </head>
+
 <body>
+
   <div id="container">
     <h2>Retro Blog Login</h2>
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
-    <button>Login</button>
+
+    <input id="username" type="text" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+
+    <br>
+    <button onclick="login()">Login</button>
+
+    <div id="status"></div>
   </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const status = document.getElementById("status");
+
+      status.innerText = "Checking credentials...";
+
+      fetch("http://192.168.64.129:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          status.innerText = "✅ Login successful!";
+          status.style.color = "green";
+        } else {
+          status.innerText = "❌ Invalid username or password.";
+          status.style.color = "red";
+        }
+      })
+      .catch(error => {
+        status.innerText = "⚠️ Backend unreachable.";
+        status.style.color = "red";
+      });
+    }
+  </script>
+
 </body>
 </html>
 
